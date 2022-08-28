@@ -1,0 +1,29 @@
+name: SMP
+version: '${project.version}'
+main: me.zxoir.smp.SMP
+api-version: 1.19
+authors: [ Zxoir ]
+depend: [ CoreProtect, PlaceholderAPI, Multiverse-Core ]
+description: SMP Plugin for PickMC
+website: https://pickmc.tebex.io/
+commands:
+  SMP:
+    description: Main Server Command
+    usage: /SMP
+  Spawn:
+    description: Spawn Command
+    usage: /Spawn
+  Back:
+    description: Back Command
+    usage: /Back
+  ChatEvents:
+    description: ChatEvents Command
+    usage: /ChatEvents
+    aliases: [ chatevent ]
+  LuckyBlock:
+    description: LuckyBlock Command
+    usage: /LuckyBlock
+    aliases: [ lb ]
+  Afk:
+    description: AFK Command
+    usage: /AFK

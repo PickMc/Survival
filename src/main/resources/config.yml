@@ -1,0 +1,73 @@
+# Database
+username: root
+database: pickmc
+password: 'password'
+ip: localhost
+port: 3306
+
+# Server Colors
+PrimaryColor: '#65ED75'
+SecondaryColor: '#F3FCF4'
+ErrorColor: '#e03d3d'
+
+# Vote Messages
+VoteBroadcast: "#F95C5C&lVote &r#414438» %secondary_color%%player_name% %primary_color%has voted and received their #E5FF65LuckyBlock"
+VoteReceivedMessage: "&e&lThank you for voting! &eYour reward is in your inventory!"
+VoteInventoryFullMessage: "&e&lThank you for voting! &eYour reward has been dropped on the ground!"
+VoteReceivedOfflineMessage: "&eYou have received your voting rewards!"
+
+# Scoreboard settings
+ScoreboardName: "%primary_color%Pick%secondary_color%MC"
+ScoreboardRefresh: 1
+Scoreboard:
+  - " "
+  - "#3C9546Ping: %secondary_color%%player_ping%"
+  - "#3C9546XYZ: %secondary_color%%player_x%, &r%player_y%, %player_z%"
+  - " "
+  - "%primary_color%Stats"
+  - "#3C9546Playtime: %secondary_color%%smp_stats_playtime%"
+  - "#3C9546Mob Kills: %secondary_color%%statistic_mob_kills%"
+  - "#3C9546Claimable Blocks: %secondary_color%%griefprevention_remainingclaims%"
+  - "#EF5D5DDeaths: %secondary_color%%smp_stats_deaths%"
+  - "#EF5D5DLast Death: %secondary_color%%statistic_time_since_death%"
+  - " "
+  - "#85EA7E&lOnline: %secondary_color%%server_online%"
+  - "#85EA7E&lTotal Joined: %secondary_color%%server_unique_joins%"
+  - " "
+
+ChatEventInterval: 1200
+ChatEventDuration: 120
+ChatEvents:
+  '1':
+    Question: Who is the best Streamer?
+    Answer: OYazan1
+  '2':
+    Question: Who is the best Developer?
+    Answer: Zxoir
+  '3':
+    Question: In what year was Minecraft fully released?
+    Answer: 2011
+  '4':
+    Question: 1 + 1
+    Answer: 2
+  '5':
+    Question: 525 + 52
+    Answer: 577
+  '6':
+    Question: 545 ÷ 5
+    Answer: 109
+  '7':
+    Question: 6 x 55
+    Answer: 330
+  '8':
+    Question: What year did OYazan1 create his Twitch Channel?
+    Answer: 2020
+  '9':
+    Question: What year did Zxoir create his Twitch Channel?
+    Answer: 2017
+  '10':
+    Question: What year did OYazan1 create his YouTube Channel?
+    Answer: 2019
+  '11':
+    Question: What year did Zxoir create his YouTube Channel?
+    Answer: 2017
