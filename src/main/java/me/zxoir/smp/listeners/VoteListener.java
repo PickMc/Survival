@@ -6,6 +6,7 @@ import lombok.Getter;
 import me.zxoir.smp.customclasses.LuckyBlock;
 import me.zxoir.smp.managers.ConfigManager;
 import me.zxoir.smp.utilities.BasicUtilities;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -47,6 +48,13 @@ public class VoteListener implements Listener {
 
         } else
             addPendingVoteReward(voter.getUniqueId());
+
+        String broadcastMessage = ConfigManager.getVoteBroadcast(voter.getName());
+
+        if (broadcastMessage.isEmpty())
+            return;
+
+        Bukkit.broadcast(LegacyComponentSerializer.legacySection().deserialize(broadcastMessage));
 
     }
 

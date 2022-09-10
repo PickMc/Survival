@@ -68,7 +68,7 @@ public class LuckyBlock {
     }
 
     private static boolean needPlayer(@NotNull LuckyBlockType luckyBlockType) {
-        return luckyBlockType.equals(LuckyBlockType.CAGE) || luckyBlockType.equals(LuckyBlockType.EXPERIENCE) || luckyBlockType.equals(LuckyBlockType.POTION_EFFECT) || luckyBlockType.equals(LuckyBlockType.ANVIL) || luckyBlockType.equals(LuckyBlockType.EXPLOSION);
+        return luckyBlockType.equals(LuckyBlockType.CAGE) || luckyBlockType.equals(LuckyBlockType.EXPERIENCE) || luckyBlockType.equals(LuckyBlockType.ANVIL) || luckyBlockType.equals(LuckyBlockType.EXPLOSION);
     }
 
 
@@ -256,7 +256,6 @@ public class LuckyBlock {
 
     public enum LuckyBlockType {
         ITEM,
-        POTION_EFFECT,
         SPAWN_ENTITY,
         TREE,
         CAGE,

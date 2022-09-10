@@ -1,10 +1,8 @@
 package me.zxoir.smp.commands;
 
 import me.zxoir.smp.SMP;
-import me.zxoir.smp.customclasses.User;
 import me.zxoir.smp.listeners.FirstJoinKitListener;
 import me.zxoir.smp.managers.ConfigManager;
-import me.zxoir.smp.managers.UserManager;
 import me.zxoir.smp.menusystem.MenuUtility;
 import me.zxoir.smp.menusystem.menus.SettingsMenu;
 import me.zxoir.smp.utilities.Colors;
@@ -18,9 +16,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.time.Duration;
-import java.time.Instant;
 
 /**
  * MIT License Copyright (c) 2022 Zxoir
@@ -40,21 +35,6 @@ public class MainCommand implements CommandExecutor {
         }
 
         if (args.length == 1) {
-
-            // SMP Test
-            if (args[0].equalsIgnoreCase("test")) {
-                if (!isPlayer)
-                    return true;
-
-                Player player = (Player) sender;
-                User user = UserManager.getUser(player.getUniqueId());
-                player.sendMessage("Calculated Current Session Playtime: " + (user.getCache().getSessionStart() != null ? Duration.between(user.getCache().getSessionStart(), Instant.now()).getSeconds() : "NULL/AFK") + " seconds");
-                player.sendMessage("Calculated Total Sessions Playtime: " + (user.getCache().getSessionStart() != null ? user.getPlaytime().plus(Duration.between(user.getCache().getSessionStart(), Instant.now())).getSeconds() : "NULL/AFK") + " seconds");
-                player.sendMessage("Cached Playtime: " + user.getPlaytime().getSeconds() + " seconds");
-                player.sendMessage("Playtime Serialized: " + UserManager.getTotalPlaytime(user).toString());
-
-                return true;
-            }
 
             // SMP reloadConfig
             if (args[0].equalsIgnoreCase("reload")) {
@@ -158,7 +138,6 @@ public class MainCommand implements CommandExecutor {
         }
 
         sender.sendMessage("\n" + Colors.primary + "#E5FF65SMP " + ChatColor.BOLD + "List of Commands\n" +
-                Colors.primary + "/SMP Test " + Colors.secondary + "Test Command\n" +
                 Colors.primary + "/SMP setFirstJoinKit " + Colors.secondary + "Set First Join Kit\n" +
                 Colors.primary + "/SMP getFirstJoinKit " + Colors.secondary + "Get First Join Kit\n" +
                 Colors.primary + "/SMP addRareItem " + Colors.secondary + "Register Rare Item\n" +

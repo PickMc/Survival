@@ -6,6 +6,8 @@ import me.zxoir.smp.managers.UserManager;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
+
 public class CustomPlaceholders extends PlaceholderExpansion {
 
     @Override
@@ -52,6 +54,12 @@ public class CustomPlaceholders extends PlaceholderExpansion {
 
                 if (param[1].equalsIgnoreCase("experience"))
                     return String.valueOf(user.getStats().getExperience());
+
+                if (param[1].equalsIgnoreCase("levelupxp"))
+                    return String.valueOf(user.getStats().getLevelUpXp());
+
+                if (param[1].equalsIgnoreCase("exptolevel"))
+                    return String.valueOf(new BigDecimal(user.getStats().getLevelUpXp()).subtract(user.getStats().getExperience().get()));
 
             }
 

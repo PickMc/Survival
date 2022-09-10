@@ -47,6 +47,9 @@ public class ConfigManager {
     @Getter
     private static String voteReceivedOfflineMessage;
 
+    @Getter
+    private static boolean EnableScoreboard;
+
     private static String scoreboardName;
 
     @Getter
@@ -74,6 +77,7 @@ public class ConfigManager {
         voteReceivedMessage = replaceCommonPlaceholders(main.getConfig().getString("VoteReceivedMessage"));
         voteInventoryFullMessage = replaceCommonPlaceholders(main.getConfig().getString("VoteInventoryFullMessage"));
         voteReceivedOfflineMessage = replaceCommonPlaceholders(main.getConfig().getString("VoteReceivedOfflineMessage"));
+        EnableScoreboard = main.getConfig().getBoolean("Enable-Scoreboard");
         scoreboardName = Colors.colorize(main.getConfig().getString("ScoreboardName"));
         scoreboardRefresh = main.getConfig().getInt("ScoreboardRefresh");
         scoreboard = main.getConfig().getStringList("Scoreboard");

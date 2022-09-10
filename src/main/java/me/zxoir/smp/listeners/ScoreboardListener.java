@@ -62,6 +62,9 @@ public class ScoreboardListener implements Listener {
     public void onJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
+        if (!ConfigManager.isEnableScoreboard())
+            return;
+
         setScoreboard(player);
         BasicUtilities.runTaskAsync(() -> Bukkit.getOnlinePlayers().forEach(ScoreboardListener::updateScoreboard));
     }

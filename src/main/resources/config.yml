@@ -1,3 +1,6 @@
+# PLACEHOLDER API : %smp_stats_deaths% %smp_stats_playtime% %smp_stats_level% %smp_stats_experience% %smp_stats_levelupxp% %smp_stats_exptolevel%
+# Staff Permission: staff.admin
+
 # Database
 username: root
 database: pickmc
@@ -17,6 +20,7 @@ VoteInventoryFullMessage: "&e&lThank you for voting! &eYour reward has been drop
 VoteReceivedOfflineMessage: "&eYou have received your voting rewards!"
 
 # Scoreboard settings
+Enable-Scoreboard: true
 ScoreboardName: "%primary_color%Pick%secondary_color%MC"
 ScoreboardRefresh: 1
 Scoreboard:
