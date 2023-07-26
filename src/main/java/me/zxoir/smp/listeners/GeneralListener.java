@@ -2,6 +2,7 @@ package me.zxoir.smp.listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.zxoir.smp.customclasses.User;
+import me.zxoir.smp.managers.ConfigManager;
 import me.zxoir.smp.managers.UserManager;
 import me.zxoir.smp.utilities.BasicUtilities;
 import me.zxoir.smp.utilities.Colors;
@@ -18,6 +19,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -31,6 +34,20 @@ import static me.zxoir.smp.utilities.Colors.colorize;
  * @since 8/17/2022
  */
 public class GeneralListener implements Listener {
+
+    @EventHandler
+    public void onJoin(@NotNull PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
+        event.joinMessage(LegacyComponentSerializer.legacySection().deserialize(ConfigManager.getJoinMessage(player.getName())));
+    }
+
+    @EventHandler
+    public void onJoin(@NotNull PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+
+        event.quitMessage(LegacyComponentSerializer.legacySection().deserialize(ConfigManager.getQuitMessage(player.getName())));
+    }
 
     /* Make Skeleton/Zombie Horses ridable */
     @EventHandler(ignoreCancelled = true)

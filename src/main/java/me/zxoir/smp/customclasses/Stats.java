@@ -48,7 +48,7 @@ public class Stats {
     }
 
     public BigDecimal addXp(int minXp, int maxXp) {
-        BigDecimal randomXp = BigDecimal.valueOf(ThreadLocalRandom.current().nextInt(maxXp - minXp) + minXp);
+        BigDecimal randomXp = BigDecimal.valueOf(ThreadLocalRandom.current().nextDouble(maxXp - minXp) + minXp);
 
         BigDecimal updatedExperience = experience.get();
         updatedExperience = updatedExperience.add(randomXp);
@@ -56,7 +56,7 @@ public class Stats {
 
         Player player = Bukkit.getPlayer(uuid);
 
-        if (player != null && player.isOnline()) {
+        if (player != null && player.isOnline() && randomXp.intValue() != 0) {
             String xpAdded = "&e+" + String.format("%.2f", randomXp.doubleValue()) + " XP ";
             String progress = "&8[&7" + String.format("%.2f", updatedExperience.doubleValue()) + " " + getProgressBar(updatedExperience.intValue(), getLevelUpXp()) + " &7" + getLevelUpXp() + "&8]";
             runTaskSync(() -> player.sendActionBar(Component.text(colorize(xpAdded + progress))));

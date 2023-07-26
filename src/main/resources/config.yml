@@ -8,6 +8,11 @@ password: 'password'
 ip: localhost
 port: 3306
 
+AllowEndPortal: false
+
+JoinMessage: "&e%player_name% has joined the server"
+QuitMessage: "&e%player_name% has left the server"
+
 # Server Colors
 PrimaryColor: '#65ED75'
 SecondaryColor: '#F3FCF4'

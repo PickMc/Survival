@@ -3,11 +3,11 @@ package me.zxoir.smp.managers;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import me.zxoir.smp.customclasses.User;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
@@ -25,8 +25,14 @@ public class UserManager {
     }
 
     public static void cacheUser(User user) {
+        if (cachedUsers.asMap().containsKey(user.getUuid()))
+            return;
+
+        Bukkit.getLogger().info("CACHE 1");
         DatabaseManager.saveToDB(user);
+        Bukkit.getLogger().info("CACHE 2");
         cachedUsers.put(user.getUuid(), user);
+        Bukkit.getLogger().info("CACHE 3");
     }
 
     public static void updateUserPlaytime(@NotNull User user) {
@@ -43,9 +49,8 @@ public class UserManager {
         return user.getPlaytime().plus(getPlayedTime);
     }
 
-    @NotNull
     public static User getUser(@NotNull UUID uuid) {
-        return Objects.requireNonNull(cachedUsers.getIfPresent(uuid));
+        return cachedUsers.getIfPresent(uuid);
     }
 
     @NotNull

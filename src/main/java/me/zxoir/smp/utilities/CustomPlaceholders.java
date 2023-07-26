@@ -1,12 +1,16 @@
 package me.zxoir.smp.utilities;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.zxoir.smp.customclasses.Team;
 import me.zxoir.smp.customclasses.User;
+import me.zxoir.smp.managers.TeamManager;
 import me.zxoir.smp.managers.UserManager;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
+
+import static me.zxoir.smp.utilities.Colors.colorize;
 
 public class CustomPlaceholders extends PlaceholderExpansion {
 
@@ -26,7 +30,7 @@ public class CustomPlaceholders extends PlaceholderExpansion {
     }
 
     @Override
-    public String onRequest(OfflinePlayer player, @NotNull String params) {
+    public String onPlaceholderRequest(Player player, @NotNull String params) {
         if (params.equalsIgnoreCase("name")) {
             return player == null ? null : player.getName(); // "name" requires the player to be valid
         }
@@ -36,6 +40,30 @@ public class CustomPlaceholders extends PlaceholderExpansion {
 
             if (param.length < 2)
                 return null;
+
+            if (param[0].equalsIgnoreCase("team")) {
+                User user = UserManager.getUsers().get(player.getUniqueId());
+
+                if (user == null)
+                    return null;
+
+                if (param[1].equalsIgnoreCase("tag")) {
+                    String teamName = user.getCache().getTeamName();
+
+                    if (teamName == null)
+                        return "";
+
+                    Team team = TeamManager.getCachedTeams().getIfPresent(teamName);
+
+                    if (teamName.isBlank() || team == null)
+                        return "";
+
+                    if (team.getTag() == null || team.getTag().isBlank())
+                        return "";
+
+                    return colorize("&8[ " + team.getColor() + team.getTag() + " &8] &r");
+                }
+            }
 
             if (param[0].equalsIgnoreCase("stats")) {
                 User user = UserManager.getUsers().get(player.getUniqueId());
@@ -60,6 +88,9 @@ public class CustomPlaceholders extends PlaceholderExpansion {
 
                 if (param[1].equalsIgnoreCase("exptolevel"))
                     return String.valueOf(new BigDecimal(user.getStats().getLevelUpXp()).subtract(user.getStats().getExperience().get()));
+
+                if (param[1].equalsIgnoreCase("afk"))
+                    return user.getCache().isAfk() ? "true" : "false";
 
             }
 

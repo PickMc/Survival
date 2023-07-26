@@ -1,6 +1,7 @@
 package me.zxoir.smp;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.sk89q.worldguard.WorldGuard;
 import lombok.Getter;
 import me.zxoir.smp.commands.*;
 import me.zxoir.smp.customclasses.ChatEvents;
@@ -11,6 +12,7 @@ import me.zxoir.smp.database.DataFile;
 import me.zxoir.smp.database.Database;
 import me.zxoir.smp.listeners.*;
 import me.zxoir.smp.managers.ConfigManager;
+import me.zxoir.smp.managers.TeamManager;
 import me.zxoir.smp.managers.UserManager;
 import me.zxoir.smp.tabcompleters.*;
 import me.zxoir.smp.utilities.BasicUtilities;
@@ -37,6 +39,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public final class SMP extends JavaPlugin {
     @Getter
+    private static SMP instance;
+    @Getter
     private static DataFile dataFile;
     @Getter
     private static final CopyOnWriteArraySet<Material> rareItems = new CopyOnWriteArraySet<>();
@@ -46,6 +50,8 @@ public final class SMP extends JavaPlugin {
     private static CoreProtectAPI coreProtectAPI;
     @Getter
     private static MultiverseCore multiverseCore;
+    @Getter
+    private static WorldGuard worldGuard;
 
     @Override
     public void onEnable() {
@@ -53,6 +59,8 @@ public final class SMP extends JavaPlugin {
         long startTime = System.currentTimeMillis();
         getLogger().info("Initializing plugin setup...");
 
+        instance = this;
+        worldGuard = WorldGuard.getInstance();
         dataFile = new DataFile();
         dataFile.setup();
         ConfigManager.setup();
@@ -79,15 +87,16 @@ public final class SMP extends JavaPlugin {
         long start = System.currentTimeMillis();
         getLogger().info("Registering Placeholders");
 
-        new CustomPlaceholders().register();
+        boolean registeredPlaceholders = new CustomPlaceholders().register();
         coreProtectAPI = getCoreProtect();
         multiverseCore = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
 
-        getLogger().info("Registered Placeholders (" + (System.currentTimeMillis() - start) + "ms)");
+        getLogger().info("Registered Placeholders (" + (System.currentTimeMillis() - start) + "ms) " + registeredPlaceholders);
 
         new Database("CREATE TABLE IF NOT EXISTS User(" +
                 "uuid VARCHAR(36) PRIMARY KEY NOT NULL," +
                 "dateJoined TEXT NOT NULL," +
+                "bag LONGTEXT," +
                 "stats LONGTEXT NOT NULL," +
                 "cache LONGTEXT NOT NULL," +
                 "playtime TEXT NOT NULL" +
@@ -96,6 +105,7 @@ public final class SMP extends JavaPlugin {
         start = System.currentTimeMillis();
         getLogger().info("Caching Users");
         UserManager.cacheUsers();
+        TeamManager.cacheMembers();
         getLogger().info("Cached Users (" + (System.currentTimeMillis() - start) + "ms)");
 
         start = System.currentTimeMillis();
@@ -131,6 +141,8 @@ public final class SMP extends JavaPlugin {
             LuckyBlock.getPlacedLuckyBlocks().remove(block);
             LuckyBlock.activateLuckyBlock(null, LuckyBlock.getRandomLuckyBlockType(), block.getLocation());
         }
+
+        UserManager.getUsers().values().forEach(User::save);
 
         Database.getDataSource().close();
     }
@@ -199,6 +211,12 @@ public final class SMP extends JavaPlugin {
         Objects.requireNonNull(getCommand("chatevents")).setExecutor(new ChatEventsCommand());
         Objects.requireNonNull(getCommand("luckyblock")).setExecutor(new LuckyBlockCommand());
         Objects.requireNonNull(getCommand("afk")).setExecutor(new AfkCommand());
+        Objects.requireNonNull(getCommand("bag")).setExecutor(new BagCommand());
+        Objects.requireNonNull(getCommand("team")).setExecutor(new TeamCommand());
+        Objects.requireNonNull(getCommand("friend")).setExecutor(new FriendCommand());
+        Objects.requireNonNull(getCommand("checkpoint")).setExecutor(new CheckpointCommand());
+        Objects.requireNonNull(getCommand("noweed")).setExecutor(new NoWeedCommand());
+        Objects.requireNonNull(getCommand("level")).setExecutor(new LevelCommand());
     }
 
     private void registerTabCompleters() {
@@ -224,5 +242,9 @@ public final class SMP extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new LuckyBlockListener(), this);
         getServer().getPluginManager().registerEvents(new GeneralListener(), this);
         getServer().getPluginManager().registerEvents(new VoteListener(), this);
+        getServer().getPluginManager().registerEvents(new BagListener(), this);
+        getServer().getPluginManager().registerEvents(new VoidTP(), this);
+        getServer().getPluginManager().registerEvents(new EndPortal(), this);
+        getServer().getPluginManager().registerEvents(new DelayListener(), this);
     }
 }

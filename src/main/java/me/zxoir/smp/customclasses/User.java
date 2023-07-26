@@ -1,7 +1,6 @@
 package me.zxoir.smp.customclasses;
 
 import lombok.Getter;
-import lombok.Setter;
 import me.zxoir.smp.managers.DatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -24,14 +23,15 @@ import java.util.UUID;
 public class User {
     private final UUID uuid;
     private final Date dateJoined;
+    private final Bag bag;
     private final Stats stats;
     private final Cache cache;
-    @Setter
     private Duration playtime;
 
-    public User(UUID uuid, Date dateJoined, Stats stats, Cache cache, Duration playtime) {
+    public User(UUID uuid, Date dateJoined, Bag bag, Stats stats, Cache cache, Duration playtime) {
         this.uuid = uuid;
         this.dateJoined = dateJoined;
+        this.bag = bag;
         this.stats = stats;
         this.cache = cache;
         this.playtime = playtime;
@@ -40,6 +40,7 @@ public class User {
     public User(UUID uuid) {
         this.uuid = uuid;
         dateJoined = new Date();
+        bag = new Bag(uuid);
         stats = new Stats(uuid);
         cache = new Cache(uuid);
         playtime = Duration.ZERO;
@@ -57,5 +58,9 @@ public class User {
 
     public void save() {
         DatabaseManager.updateDatabase(this);
+    }
+
+    public void setPlaytime(Duration playtime) {
+        this.playtime = playtime;
     }
 }

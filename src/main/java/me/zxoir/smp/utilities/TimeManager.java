@@ -215,15 +215,15 @@ public class TimeManager {
             else if (minutes == 0)
                 timeString = days + " d";
             else
-                timeString = days + " d" + " and " + minutes + " min";
+                timeString = days + " d" + " " + minutes + " min";
 
         } else if (time >= 3600) { // hours
             if (minutes > 0)
-                timeString = hours + " h" + " and " + minutes + " min";
+                timeString = hours + " h " + minutes + " min";
             else
                 timeString = hours + " h";
         } else if (time >= 60) { // minutes
-            timeString = minutes + " min";
+            timeString = minutes + " min " + seconds + " s";
         } else { // seconds
             timeString = seconds + " s";
         }

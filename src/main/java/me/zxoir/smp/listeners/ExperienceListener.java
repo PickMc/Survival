@@ -53,7 +53,7 @@ public class ExperienceListener implements Listener {
             @Override
             public void run() {
 
-                if (player == null || !player.isOnline()) {
+                if (!player.isOnline()) {
                     cancel();
                     return;
                 }
@@ -66,6 +66,14 @@ public class ExperienceListener implements Listener {
             }
 
         }.runTaskTimerAsynchronously(SMP.getPlugin(SMP.class), 0, 20L * 60);
+    }
+
+    @EventHandler
+    public void onExplosion(@NotNull BlockExplodeEvent event) {
+        for (Block block : event.blockList()) {
+            if (isFormed(block))
+                formedBlocks.remove(event.getBlock());
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -81,8 +89,10 @@ public class ExperienceListener implements Listener {
         if (user.getCache().isAfk())
             return;
 
-        if (isFormed(event.getBlock()))
+        if (isFormed(event.getBlock())) {
+            formedBlocks.remove(event.getBlock());
             return;
+        }
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(SMP.getPlugin(SMP.class), () -> {
             if (isPlacedByPlayer(event.getBlock()))

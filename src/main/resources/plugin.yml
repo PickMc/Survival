@@ -1,7 +1,7 @@
 name: SMP
 version: '${project.version}'
 main: me.zxoir.smp.SMP
-api-version: 1.19
+api-version: 1.20
 authors: [ Zxoir ]
 depend: [ CoreProtect, PlaceholderAPI, Multiverse-Core ]
 description: SMP Plugin for PickMC
@@ -27,3 +27,22 @@ commands:
   Afk:
     description: AFK Command
     usage: /AFK
+  Bag:
+    description: Bag Command
+    usage: /Bag
+  Team:
+    description: Team Command
+    usage: /Team
+  Friend:
+    description: Friend Command
+    usage: /Friend
+  Checkpoint:
+    description: Checkpoint Command
+    usage: /Checkpoint
+  NoWeed:
+    description: No Weed Command
+    usage: /noweed
+  Level:
+    description: Level Command
+    usage: /level
+    aliases: [levels]

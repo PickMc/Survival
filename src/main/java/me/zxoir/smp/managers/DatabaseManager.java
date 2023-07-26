@@ -1,5 +1,6 @@
 package me.zxoir.smp.managers;
 
+import me.zxoir.smp.customclasses.Bag;
 import me.zxoir.smp.customclasses.Cache;
 import me.zxoir.smp.customclasses.Stats;
 import me.zxoir.smp.customclasses.User;
@@ -105,18 +106,20 @@ public class DatabaseManager {
         return Database.execute(conn -> {
             try {
                 long start = System.currentTimeMillis();
-                PreparedStatement statement = conn.prepareStatement("INSERT INTO User VALUES(?, ?, ?, ?, ?)");
+                PreparedStatement statement = conn.prepareStatement("INSERT INTO User VALUES(?, ?, ?, ?, ?, ?)");
 
                 statement.setString(1, user.getUuid().toString());
                 String date = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss aa").format(user.getDateJoined());
 
                 statement.setString(2, date);
 
-                statement.setString(3, GlobalCache.getAdapter().toJson(user.getStats(), Stats.class));
+                statement.setString(3, GlobalCache.getAdapter().toJson(user.getBag(), Bag.class));
 
-                statement.setString(4, GlobalCache.getAdapter().toJson(user.getCache(), Cache.class));
+                statement.setString(4, GlobalCache.getAdapter().toJson(user.getStats(), Stats.class));
 
-                statement.setString(5, GlobalCache.getAdapter().toJson(user.getPlaytime().toString()));
+                statement.setString(5, GlobalCache.getAdapter().toJson(user.getCache(), Cache.class));
+
+                statement.setString(6, GlobalCache.getAdapter().toJson(user.getPlaytime().toString()));
 
                 statement.execute();
 
@@ -150,15 +153,37 @@ public class DatabaseManager {
             long start = System.currentTimeMillis();
 
             PreparedStatement statement = conn.prepareStatement(
-                    "UPDATE User SET stats = ?, cache = ?, playtime = ? WHERE uuid = ?");
+                    "UPDATE User SET bag = ?, stats = ?, cache = ?, playtime = ? WHERE uuid = ?");
 
-            statement.setString(1, GlobalCache.getAdapter().toJson(user.getStats(), Stats.class));
+            statement.setString(1, GlobalCache.getAdapter().toJson(user.getBag(), Bag.class));
 
-            statement.setString(2, GlobalCache.getAdapter().toJson(user.getCache(), Cache.class));
+            statement.setString(2, GlobalCache.getAdapter().toJson(user.getStats(), Stats.class));
 
-            statement.setString(3, user.getPlaytime().toString());
+            statement.setString(3, GlobalCache.getAdapter().toJson(user.getCache(), Cache.class));
 
-            statement.setString(4, user.getUuid().toString());
+            statement.setString(4, user.getPlaytime().toString());
+
+            statement.setString(5, user.getUuid().toString());
+
+            statement.execute();
+
+            double finish = (double) (System.currentTimeMillis() - start) / 1000.0;
+            Bukkit.getLogger().info("Updated User to Database in " + finish + " seconds.");
+        });
+    }
+
+    @NotNull
+    @Contract("_ -> new")
+    public static CompletableFuture<Void> updateBagToDatabase(User user) {
+        return Database.execute(conn -> {
+            long start = System.currentTimeMillis();
+
+            PreparedStatement statement = conn.prepareStatement(
+                    "UPDATE User SET bag = ? WHERE uuid = ?");
+
+            statement.setString(1, GlobalCache.getAdapter().toJson(user.getBag(), Bag.class));
+
+            statement.setString(2, user.getUuid().toString());
 
             statement.execute();
 
@@ -170,6 +195,7 @@ public class DatabaseManager {
     @NotNull
     private static User dbToData(@NotNull ResultSet resultSet) throws SQLException {
         UUID uuid = UUID.fromString(resultSet.getString("uuid"));
+        Bukkit.getLogger().info("1");
 
         Instant dateJoinedInstant = new Date().toInstant();
         try {
@@ -177,16 +203,25 @@ public class DatabaseManager {
         } catch (ParseException e) {
             Bukkit.getLogger().info("FAILED TO PARSE DATE OF DATA UUID " + uuid + "WITH ERROR: " + e.getMessage());
         }
+        Bukkit.getLogger().info("2");
 
         Date dateJoined = Date.from(dateJoinedInstant);
+        Bukkit.getLogger().info("3");
+
+        Bag bag = GlobalCache.getAdapter().fromJson(resultSet.getString("bag"), Bag.class);
+        Bukkit.getLogger().info("4");
 
         Stats stats = GlobalCache.getAdapter().fromJson(resultSet.getString("stats"), Stats.class);
+        Bukkit.getLogger().info("5");
 
         Cache cache = GlobalCache.getAdapter().fromJson(resultSet.getString("cache"), Cache.class);
+        Bukkit.getLogger().info("6");
 
-        Duration playtime = Duration.parse(resultSet.getString("playtime"));
+        String playtimeText = resultSet.getString("playtime").replace("\"", "");
+        Duration playtime = Duration.parse(playtimeText);
+        Bukkit.getLogger().info("7");
 
-        return new User(uuid, dateJoined, stats, cache, playtime);
+        return new User(uuid, dateJoined, bag, stats, cache, playtime);
     }
 
 }

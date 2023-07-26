@@ -28,6 +28,13 @@ public class ConfigManager {
     private static String port;
 
     @Getter
+    private static boolean allowEndPortal;
+
+    private static String joinMessage;
+
+    private static String quitMessage;
+
+    @Getter
     private static String primaryColor;
 
     @Getter
@@ -70,9 +77,12 @@ public class ConfigManager {
         password = main.getConfig().getString("password");
         ip = main.getConfig().getString("ip");
         port = main.getConfig().getString("port");
+        allowEndPortal = main.getConfig().getBoolean("AllowEndPortal");
         primaryColor = main.getConfig().getString("PrimaryColor");
         secondaryColor = main.getConfig().getString("SecondaryColor");
         errorColor = main.getConfig().getString("ErrorColor");
+        joinMessage = replaceCommonPlaceholders(main.getConfig().getString("JoinMessage"));
+        quitMessage = replaceCommonPlaceholders(main.getConfig().getString("QuitMessage"));
         voteBroadcast = replaceCommonPlaceholders(main.getConfig().getString("VoteBroadcast"));
         voteReceivedMessage = replaceCommonPlaceholders(main.getConfig().getString("VoteReceivedMessage"));
         voteInventoryFullMessage = replaceCommonPlaceholders(main.getConfig().getString("VoteInventoryFullMessage"));
@@ -94,6 +104,14 @@ public class ConfigManager {
         main.reloadConfig();
         SMP.getDataFile().reloadConfig();
         getConfigData();
+    }
+
+    public static @NotNull String getJoinMessage(String playerName) {
+        return joinMessage.replace("%player_name%", playerName);
+    }
+
+    public static @NotNull String getQuitMessage(String playerName) {
+        return quitMessage.replace("%player_name%", playerName);
     }
 
     public static @NotNull String getScoreboardName() {

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
+import me.zxoir.smp.customclasses.Bag;
 import me.zxoir.smp.customclasses.Cache;
 import me.zxoir.smp.customclasses.Stats;
 import me.zxoir.smp.customclasses.Warp;
@@ -31,5 +32,5 @@ public class GlobalCache {
     @Getter
     private static Warp spawnWarp;
     @Getter
-    private static final Gson adapter = new GsonBuilder().registerTypeAdapter(Cache.class, new CacheAdapter()).registerTypeAdapter(Stats.class, new StatsAdapter()).registerTypeAdapter(Location.class, new LocationAdapter()).serializeNulls().create();
+    private static final Gson adapter = new GsonBuilder().registerTypeAdapter(Bag.class, new BagAdapter()).registerTypeAdapter(Cache.class, new CacheAdapter()).registerTypeAdapter(Stats.class, new StatsAdapter()).registerTypeAdapter(Location.class, new LocationAdapter()).serializeNulls().create();
 }

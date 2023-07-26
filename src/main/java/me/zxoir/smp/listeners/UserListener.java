@@ -1,7 +1,9 @@
 package me.zxoir.smp.listeners;
 
 import me.zxoir.smp.customclasses.User;
+import me.zxoir.smp.managers.DatabaseManager;
 import me.zxoir.smp.managers.UserManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,10 +23,18 @@ public class UserListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        Bukkit.getLogger().info("JOIN 1");
 
-        if (UserManager.getUsers().containsKey(player.getUniqueId()))
-            return;
+        if (UserManager.getUsers().containsKey(player.getUniqueId())) {
+            Bukkit.getLogger().info("JOIN 2");
+            if (UserManager.getUser(player.getUniqueId()) != null) {
+                Bukkit.getLogger().info("JOIN 3");
+                UserManager.cacheUser(DatabaseManager.getUser(player.getUniqueId()));
+                return;
+            }
+        }
 
+        Bukkit.getLogger().info("JOIN 4");
         UserManager.cacheUser(new User(player.getUniqueId()));
     }
 

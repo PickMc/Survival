@@ -174,9 +174,6 @@ public class LuckyBlockListener implements Listener {
         event.setDropItems(false);
         LuckyBlock.LuckyBlockType luckyBlockType = LuckyBlock.getRandomLuckyBlockType();
 
-        if (player.isSneaking())
-            luckyBlockType = LuckyBlock.LuckyBlockType.ANVIL;
-
         LuckyBlock.activateLuckyBlock(player, luckyBlockType, event.getBlock().getLocation());
     }
 
